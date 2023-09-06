@@ -4,7 +4,7 @@ import { createUser, deleteUser, readUser, readUsers, updateUser } from '../cont
 export const route = express.Router();
 
 route.post('/create', createUser);
-route.get('/read', readUser);
+route.get('/read/:id', readUser);
 route.get('/read-all', readUsers);
-route.get('/update', updateUser);
+route.patch('/update/:id', updateUser);
 route.get('/delete', deleteUser) ;
