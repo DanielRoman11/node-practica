@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { db } from "../config/db.js";
-import bcrypt from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
  
 export const User = db.define('user', {
   id: {
@@ -30,7 +30,19 @@ export const User = db.define('user', {
   hooks: {
     beforeCreate: async function(user) {
       const salt = await bcrypt.genSalt(12);
+
       user.password = await bcrypt.hash(user.password, salt);
+    },
+    beforeUpdate: async function(user) {
+      const salt = await bcrypt.genSalt(12);
+
+      user.password = await bcrypt.hash(user.password, salt);
+    }    
+  }
+},{
+  instanceMethods: {
+    validPassword: (password) => {
+      return bcrypt.compareSync(password, this.password);
     }
   }
 });

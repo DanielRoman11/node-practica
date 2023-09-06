@@ -6,13 +6,18 @@ export const createUser = async(req, res) => {
   try{
 
     await check('username').isLength({min: 4, max: 12}).withMessage('Incorrect name length. min 4 and max 12 characters').run(req);
-    await check('email').isEmail().withMessage('Not a valid email').run(req);
+    await check('email').isEmail().withMessage('Not a valid email').custom(async value =>{
+      const { email } = req.body;
+
+      const user = await User.findOne({where: {email}});
+      if(user){
+        throw new Error('E-mail already in use');
+      }
+    }).run(req);
     await check('password').isLength({min: 4, max : 50}).
     withMessage('Password length is incorrect').run(req);
 
     let errors = validationResult(req);
-
-    console.log(req.body);
 
     if(!errors.isEmpty()){
       return res.status(400).json(errors.array());
@@ -20,15 +25,7 @@ export const createUser = async(req, res) => {
     
     const { username, email, password } = req.body;
 
-    const user = await User.findOne({
-      where: {email}
-    })
-
-    if(user){
-      return res.status(400).json({error: "Email is already in use"});
-    }
-
-    const newUser = await User.create({username, email, password});
+    const newUser = await User.create({ username, email, password });
 
     console.log(newUser);
 
@@ -44,7 +41,9 @@ export const readUsers = async(req, res) => {
   res.json(users);
 }
 export const readUser = (req, res) => {
-  res.send("Leyendo ususario")
+  const { id } = req.params;
+
+  
 }
 export const updateUser = (req, res) => {
   res.send("Actualizando usuario")
