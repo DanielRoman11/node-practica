@@ -43,7 +43,7 @@ export const User = db.define('user', {
     attributes: {
       exclude: ['password']
     },
-  }
+  },
 },{
   instanceMethods: {
     validPassword: (password) => {
