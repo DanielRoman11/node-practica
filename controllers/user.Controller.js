@@ -104,7 +104,7 @@ export const updateUser = async(req, res) => {
     console.error(error);
   }
 }
-export const deleteUser = async(req, res) => {
+export const deleteUser = async(req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -115,8 +115,7 @@ export const deleteUser = async(req, res) => {
 
     await user.destroy();
 
-    return res.status(204);
-    
+    return res.status(204).send();
   } catch (error) {
     console.error(error);
   }

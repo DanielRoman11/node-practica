@@ -7,4 +7,4 @@ route.post('/create', createUser);
 route.get('/read/:id', readUser);
 route.get('/read-all', readUsers);
 route.patch('/update/:id', updateUser);
-route.get('/delete/:id', deleteUser) ;
+route.delete('/delete/:id', deleteUser);
